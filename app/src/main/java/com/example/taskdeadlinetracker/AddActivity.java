@@ -21,7 +21,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
-
     private EditText etTitle, etDescription;
     private RadioGroup rgPriority;
     private TextView tvDeadline;
