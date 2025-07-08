@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="priority_array">
+        <item>LOW</item>
+        <item>MEDIUM</item>
+        <item>HIGH</item>
+    </string-array>
+</resources>
