@@ -26,7 +26,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddActivity extends AppCompatActivity {
+public class EditTaskActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private TextInputLayout tilTitle;
     private EditText etTitle, etDescription;
