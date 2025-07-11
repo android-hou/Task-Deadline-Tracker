@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         // 1. Demo user
         user = new Entity_User();
         user.setId(1);
-        user.setUserName("demo");
+        user.setUsername("demo");
         user.setEmail("demo@example.com");
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
