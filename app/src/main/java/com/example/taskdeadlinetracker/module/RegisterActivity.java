@@ -1,22 +1,16 @@
 package com.example.taskdeadlinetracker;
 
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.taskdeadlinetracker.module.DatabaseClient;
-import com.example.taskdeadlinetracker.module.Entity_User;
-import com.example.taskdeadlinetracker.module.UserDao;
-import org.mindrot.jbcrypt.BCrypt;
-import java.util.Date;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText etUsername, etEmail, etPassword, etConfirmPassword;
     private Button btnRegister;
-    private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +22,6 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnRegister = findViewById(R.id.btnRegister);
-
-        userDao = DatabaseClient.getInstance(this).getAppDatabase().userDao();
 
         btnRegister.setOnClickListener(v -> registerUser());
     }
@@ -61,26 +53,24 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        AsyncTask.execute(() -> {
-            Entity_User existedUser = userDao.findByUsernameOrEmail(username, email);
-            if (existedUser != null) {
-                runOnUiThread(() -> Toast.makeText(this, "Tên đăng nhập hoặc email đã tồn tại!", Toast.LENGTH_SHORT).show());
-                return;
-            }
-            String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
-            Entity_User newUser = new Entity_User();
-            newUser.setUsername(username);
-            newUser.setEmail(email);
-            newUser.setPasswordHash(passwordHash);
-            newUser.setCreatedAt(new Date());
-            newUser.setUpdatedAt(new Date());
+        // Kiểm tra tài khoản đã tồn tại chưa (nếu dùng SharedPreferences chỉ đăng ký 1 user)
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String savedUsername = prefs.getString("username", null);
+        String savedEmail = prefs.getString("email", null);
 
-            userDao.insertUser(newUser);
+        if ((username.equals(savedUsername)) || (email.equals(savedEmail))) {
+            Toast.makeText(this, "Tên đăng nhập hoặc email đã tồn tại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Đăng ký thành công! Vui lòng đăng nhập.", Toast.LENGTH_SHORT).show();
-                finish(); // Quay về LoginActivity
-            });
-        });
+        // Lưu thông tin đăng ký vào SharedPreferences
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("username", username);
+        editor.putString("email", email);
+        editor.putString("password", password); // Nếu muốn bảo mật hơn, bạn có thể mã hóa ở đây
+        editor.apply();
+
+        Toast.makeText(this, "Đăng ký thành công! Vui lòng đăng nhập.", Toast.LENGTH_SHORT).show();
+        finish(); // Quay về LoginActivity
     }
 }

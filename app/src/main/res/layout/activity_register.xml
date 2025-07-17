@@ -38,22 +38,23 @@
         android:id="@+id/tvRegisterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:text="Đăng ký tài khoản"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/appName"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:height="48dp"
         android:id="@+id/etUsername"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
+        android:height="48dp"
         android:hint="Tên đăng nhập"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,12 +62,13 @@
         app:layout_constraintTop_toBottomOf="@+id/tvRegisterTitle" />
 
     <EditText
-        android:height="48dp"
         android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
+        android:height="48dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,12 +76,13 @@
         app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
     <EditText
-        android:height="48dp"
         android:id="@+id/etPassword"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
+        android:height="48dp"
         android:hint="Mật khẩu"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,12 +90,13 @@
         app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
     <EditText
-        android:height="48dp"
         android:id="@+id/etConfirmPassword"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
+        android:height="48dp"
         android:hint="Xác nhận mật khẩu"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,9 +107,11 @@
         android:id="@+id/btnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginStart="147dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="147dp"
         android:text="Đăng ký"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
 
@@ -113,7 +119,8 @@
         android:id="@+id/appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="33dp"
         android:text="Task – Deadline Tracker"
         android:textColor="#212121"
         android:textSize="20sp"
@@ -125,7 +132,8 @@
         android:id="@+id/imageView3"
         android:layout_width="34dp"
         android:layout_height="30dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
         android:contentDescription="Logo"
         android:src="@android:drawable/ic_menu_agenda"
         app:layout_constraintStart_toStartOf="parent"

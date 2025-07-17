@@ -2,23 +2,17 @@ package com.example.taskdeadlinetracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.taskdeadlinetracker.module.DatabaseClient;
-import com.example.taskdeadlinetracker.module.Entity_User;
-import com.example.taskdeadlinetracker.module.UserDao;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etLoginUsername, etLoginPassword;
     private Button btnLogin;
-    private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +23,10 @@ public class LoginActivity extends AppCompatActivity {
         etLoginPassword = findViewById(R.id.etLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
-        userDao = DatabaseClient.getInstance(this).getAppDatabase().userDao();
+        // === GỢI Ý USERNAME/EMAIL ĐÃ ĐĂNG KÝ LÊN Ô NHẬP ===
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String lastUsername = prefs.getString("username", "");
+        etLoginUsername.setText(lastUsername);
 
         btnLogin.setOnClickListener(v -> loginUser());
 
@@ -49,27 +46,26 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        AsyncTask.execute(() -> {
-            Entity_User user = userDao.findByUsernameOrEmail(input, input);
-            if (user == null) {
-                runOnUiThread(() -> Toast.makeText(this, "Sai tên đăng nhập/email hoặc mật khẩu!", Toast.LENGTH_SHORT).show());
-            } else if (!BCrypt.checkpw(password, user.getPasswordHash())) {
-                runOnUiThread(() -> Toast.makeText(this, "Sai tên đăng nhập/email hoặc mật khẩu!", Toast.LENGTH_SHORT).show());
-            } else {
-                // Lưu session vào SharedPreferences
-                SharedPreferences prefs = getSharedPreferences("user_session", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("user_id", user.getId());
-                editor.putString("username", user.getUsername());
-                editor.putLong("login_time", System.currentTimeMillis());
-                editor.apply();
+        // Lấy thông tin đã lưu trong SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String savedUsername = prefs.getString("username", null);
+        String savedEmail = prefs.getString("email", null);
+        String savedPassword = prefs.getString("password", null);
 
-                runOnUiThread(() -> {
-                    // Chuyển sang MainActivity nếu login thành công
-                    startActivity(new Intent(this, MainActivity.class));
-                    finish();
-                });
-            }
-        });
+        // Kiểm tra đăng nhập bằng username hoặc email và mật khẩu
+        if ((input.equals(savedUsername) || input.equals(savedEmail)) && password.equals(savedPassword)) {
+            // Đăng nhập thành công: Lưu thông tin đăng nhập (nếu cần)
+            SharedPreferences sessionPrefs = getSharedPreferences("user_session", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sessionPrefs.edit();
+            editor.putString("username", savedUsername);
+            editor.putLong("login_time", System.currentTimeMillis());
+            editor.apply();
+
+            // Chuyển sang MainActivity
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "Sai tên đăng nhập/email hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
